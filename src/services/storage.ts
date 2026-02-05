@@ -13,7 +13,7 @@ export const storage = {
 
   async getAccessToken(): Promise<string | null> {
     const { value } = await Preferences.get({ key: KEYS.ACCESS_TOKEN })
-    return value
+    return value && value !== 'undefined' ? value : null
   },
 
   async setRefreshToken(token: string): Promise<void> {
@@ -22,7 +22,7 @@ export const storage = {
 
   async getRefreshToken(): Promise<string | null> {
     const { value } = await Preferences.get({ key: KEYS.REFRESH_TOKEN })
-    return value
+    return value && value !== 'undefined' ? value : null
   },
 
   async setUser(user: object): Promise<void> {
@@ -31,7 +31,14 @@ export const storage = {
 
   async getUser<T>(): Promise<T | null> {
     const { value } = await Preferences.get({ key: KEYS.USER })
-    return value ? JSON.parse(value) : null
+    if (!value || value === 'undefined' || value === 'null') {
+      return null
+    }
+    try {
+      return JSON.parse(value)
+    } catch {
+      return null
+    }
   },
 
   async clearAuth(): Promise<void> {
