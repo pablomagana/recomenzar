@@ -28,6 +28,7 @@ function selectMood(level: MoodLevel): void {
     <button
       v-for="mood in moods"
       :key="mood.level"
+      type="button"
       class="mood-button"
       :class="{ active: modelValue === mood.level }"
       :style="{ '--mood-color': mood.color }"

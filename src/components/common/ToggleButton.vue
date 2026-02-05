@@ -22,6 +22,7 @@ function select(value: boolean): void {
 <template>
   <div class="toggle-button">
     <button
+      type="button"
       class="toggle-option"
       :class="{ active: modelValue === true }"
       @click="select(true)"
@@ -29,6 +30,7 @@ function select(value: boolean): void {
       {{ yesLabel }}
     </button>
     <button
+      type="button"
       class="toggle-option"
       :class="{ active: modelValue === false }"
       @click="select(false)"
