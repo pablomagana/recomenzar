@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { Capacitor } from '@capacitor/core'
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 
 interface Props {
@@ -15,6 +17,9 @@ const emit = defineEmits<{
   (e: 'change', file: Blob): void
 }>()
 
+const fileInput = ref<HTMLInputElement | null>(null)
+const isNative = Capacitor.isNativePlatform()
+
 function getInitials(): string {
   if (!props.name) return '?'
   const parts = props.name.split(' ')
@@ -24,9 +29,26 @@ function getInitials(): string {
   return parts[0].substring(0, 2).toUpperCase()
 }
 
-async function takePhoto(): Promise<void> {
+async function handleClick(): Promise<void> {
   if (!props.editable) return
 
+  if (isNative) {
+    await takePhotoNative()
+  } else {
+    fileInput.value?.click()
+  }
+}
+
+function handleFileChange(event: Event): void {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) {
+    emit('change', file)
+  }
+  input.value = ''
+}
+
+async function takePhotoNative(): Promise<void> {
   try {
     const image = await Camera.getPhoto({
       quality: 90,
@@ -55,7 +77,7 @@ async function takePhoto(): Promise<void> {
 </script>
 
 <template>
-  <div class="avatar-container" :class="{ editable }" @click="takePhoto">
+  <div class="avatar-container" :class="{ editable }" @click="handleClick">
     <img
       v-if="avatarUrl"
       :src="avatarUrl"
@@ -72,6 +94,15 @@ async function takePhoto(): Promise<void> {
         <circle cx="12" cy="13" r="4" />
       </svg>
     </div>
+
+    <input
+      v-if="editable && !isNative"
+      ref="fileInput"
+      type="file"
+      accept="image/*"
+      class="hidden-input"
+      @change="handleFileChange"
+    />
   </div>
 </template>
 
@@ -123,5 +154,9 @@ async function takePhoto(): Promise<void> {
 .edit-overlay svg {
   width: 18px;
   height: 18px;
+}
+
+.hidden-input {
+  display: none;
 }
 </style>
