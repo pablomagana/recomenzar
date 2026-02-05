@@ -47,8 +47,8 @@ function goBack(): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #4A3728;
-  color: white;
+  background-color: #d7ae48;
+  color: #4A3728;
   padding: 1rem;
   padding-top: calc(1rem + env(safe-area-inset-top));
   position: sticky;
@@ -76,7 +76,7 @@ function goBack(): void {
 .back-button {
   background: none;
   border: none;
-  color: white;
+  color: #4A3728;
   padding: 0.5rem;
   cursor: pointer;
   display: flex;

@@ -66,6 +66,8 @@ function goToRegister(): void {
 
 .logo {
   margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .logo-icon {
