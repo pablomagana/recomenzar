@@ -33,7 +33,11 @@ export const reportsApi = {
   },
 
   async createReport(data: CreateReportRequest): Promise<DailyReport> {
-    const response = await apiClient.post<DailyReport>('/reports', data)
+    const payload = {
+      ...data,
+      fecha: new Date().toISOString().split('T')[0]
+    }
+    const response = await apiClient.post<DailyReport>('/reports', payload)
     return response.data
   },
 
