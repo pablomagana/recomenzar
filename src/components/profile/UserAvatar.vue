@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Capacitor } from '@capacitor/core'
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 
 interface Props {
@@ -18,7 +17,6 @@ const emit = defineEmits<{
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null)
-const isNative = Capacitor.isNativePlatform()
 
 function getInitials(): string {
   if (!props.name) return '?'
@@ -32,24 +30,8 @@ function getInitials(): string {
 async function handleClick(): Promise<void> {
   if (!props.editable) return
 
-  if (isNative) {
-    await takePhotoNative()
-  } else {
-    fileInput.value?.click()
-  }
-}
-
-function handleFileChange(event: Event): void {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-  if (file) {
-    emit('change', file)
-  }
-  input.value = ''
-}
-
-async function takePhotoNative(): Promise<void> {
   try {
+    // Try Capacitor Camera first (works on native)
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
@@ -70,9 +52,19 @@ async function takePhotoNative(): Promise<void> {
       const blob = new Blob([ab], { type: `image/${image.format}` })
       emit('change', blob)
     }
-  } catch (error) {
-    console.error('Error taking photo:', error)
+  } catch {
+    // Camera not available or user cancelled, use file input fallback
+    fileInput.value?.click()
   }
+}
+
+function handleFileChange(event: Event): void {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) {
+    emit('change', file)
+  }
+  input.value = ''
 }
 </script>
 
@@ -96,7 +88,7 @@ async function takePhotoNative(): Promise<void> {
     </div>
 
     <input
-      v-if="editable && !isNative"
+      v-if="editable"
       ref="fileInput"
       type="file"
       accept="image/*"
