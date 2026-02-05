@@ -18,7 +18,11 @@ export const scheduleApi = {
   },
 
   async createSchedule(data: CreateScheduleRequest): Promise<DailySchedule> {
-    const response = await apiClient.post<DailySchedule>('/schedules', data)
+    const payload = {
+      registradoPara: data.fecha,
+      entries: data.entries
+    }
+    const response = await apiClient.post<DailySchedule>('/schedules', payload)
     return response.data
   },
 
