@@ -1,0 +1,22 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+
+  <!-- Rising sun rays -->
+  <g stroke="#F9A825" stroke-width="2" stroke-linecap="round">
+    <line x1="50" y1="25" x2="50" y2="15"/>
+    <line x1="35" y1="30" x2="28" y2="23"/>
+    <line x1="65" y1="30" x2="72" y2="23"/>
+    <line x1="25" y1="45" x2="15" y2="45"/>
+    <line x1="75" y1="45" x2="85" y2="45"/>
+  </g>
+
+  <!-- Sun -->
+  <circle cx="50" cy="45" r="15" fill="#F9A825"/>
+
+  <!-- Horizon/mountain -->
+  <path d="M15 65 L35 50 L50 60 L65 45 L85 65 L85 80 L15 80 Z" fill="#2E7D32"/>
+
+  <!-- Path/road -->
+  <path d="M45 80 L48 60 L52 60 L55 80" fill="#4A3728"/>
+</svg>

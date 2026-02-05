@@ -1,0 +1,11 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Very sad face -->
+  <circle cx="24" cy="24" r="22" fill="#EF4444"/>
+  <circle cx="16" cy="18" r="3" fill="white"/>
+  <circle cx="32" cy="18" r="3" fill="white"/>
+  <!-- Tears -->
+  <ellipse cx="16" cy="26" rx="2" ry="4" fill="#93C5FD"/>
+  <ellipse cx="32" cy="26" rx="2" ry="4" fill="#93C5FD"/>
+  <!-- Very sad mouth -->
+  <path d="M14 36 Q24 28 34 36" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</svg>

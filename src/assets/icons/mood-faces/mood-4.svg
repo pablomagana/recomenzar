@@ -1,0 +1,8 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Happy face -->
+  <circle cx="24" cy="24" r="22" fill="#84CC16"/>
+  <circle cx="16" cy="18" r="3" fill="white"/>
+  <circle cx="32" cy="18" r="3" fill="white"/>
+  <!-- Happy mouth -->
+  <path d="M16 30 Q24 36 32 30" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</svg>
