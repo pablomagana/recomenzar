@@ -15,11 +15,17 @@ export async function authGuard(
 
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
+  const isAdmin = authStore.isAdmin
 
   if (requiresAuth && !authStore.isAuthenticated) {
     next({ path: '/login', query: { redirect: to.fullPath } })
   } else if (requiresGuest && authStore.isAuthenticated) {
+    next(isAdmin ? '/admin/dashboard' : '/tabs/profile')
+  } else if (requiresAdmin && !isAdmin) {
     next('/tabs/profile')
+  } else if (requiresAuth && !requiresAdmin && isAdmin && to.path.startsWith('/tabs')) {
+    next('/admin/dashboard')
   } else {
     next()
   }

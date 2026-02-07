@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isInitialized = ref(false)
 
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
+  const isAdmin = computed(() => user.value?.role === 'admin')
 
   async function initialize(): Promise<void> {
     if (isInitialized.value) return
@@ -112,6 +113,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     isInitialized,
     isAuthenticated,
+    isAdmin,
     initialize,
     login,
     register,

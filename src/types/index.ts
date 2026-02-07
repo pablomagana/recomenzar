@@ -31,6 +31,7 @@ export interface User {
   apellidos: string
   fechaNacimiento: string
   avatarUrl?: string
+  role: string
   createdAt: string
   updatedAt: string
 }
@@ -114,6 +115,38 @@ export interface ScheduleCorrection {
   entryId: string
   horaCorreccion?: string | null
   accionCorreccion?: string | null
+}
+
+// Admin Types
+export type AlertType =
+  | 'sin_reporte'
+  | 'animo_bajo'
+  | 'horario_incumplido'
+  | 'llamadas_realizadas'
+  | 'retos_incumplidos'
+
+export interface AdminCreateUserRequest {
+  email: string
+  password: string
+  nombre: string
+  apellidos: string
+  role?: string
+  fechaNacimiento?: string
+}
+
+export interface AdminUpdateUserRequest {
+  nombre?: string
+  apellidos?: string
+  email?: string
+  role?: string
+  fechaNacimiento?: string
+}
+
+export interface DashboardEntry {
+  user: User
+  report: DailyReport | null
+  challenges: Challenge[]
+  alerts: AlertType[]
 }
 
 // API Response Types

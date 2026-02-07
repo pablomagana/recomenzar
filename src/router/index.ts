@@ -64,6 +64,37 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/admin',
+      component: () => import('@/views/admin/AdminLayout.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+      children: [
+        {
+          path: '',
+          redirect: '/admin/dashboard'
+        },
+        {
+          path: 'dashboard',
+          name: 'admin-dashboard',
+          component: () => import('@/views/admin/AdminDashboardView.vue')
+        },
+        {
+          path: 'users',
+          name: 'admin-users',
+          component: () => import('@/views/admin/AdminUsersView.vue')
+        },
+        {
+          path: 'users/new',
+          name: 'admin-user-new',
+          component: () => import('@/views/admin/AdminUserFormView.vue')
+        },
+        {
+          path: 'users/:id/edit',
+          name: 'admin-user-edit',
+          component: () => import('@/views/admin/AdminUserFormView.vue')
+        }
+      ]
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/tabs/profile'
     }

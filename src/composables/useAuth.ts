@@ -13,7 +13,8 @@ export function useAuth() {
 
   async function login(credentials: LoginRequest): Promise<void> {
     await authStore.login(credentials)
-    router.push('/tabs/profile')
+    const target = authStore.user?.role === 'admin' ? '/admin/dashboard' : '/tabs/profile'
+    router.push(target)
   }
 
   async function register(data: RegisterRequest): Promise<void> {
