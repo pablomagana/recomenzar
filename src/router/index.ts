@@ -78,6 +78,11 @@ const router = createRouter({
           component: () => import('@/views/admin/AdminDashboardView.vue')
         },
         {
+          path: 'alertas',
+          name: 'admin-alertas',
+          component: () => import('@/views/admin/AdminAlertasView.vue')
+        },
+        {
           path: 'users',
           name: 'admin-users',
           component: () => import('@/views/admin/AdminUsersView.vue')

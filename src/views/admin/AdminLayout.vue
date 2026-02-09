@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useAdminStore } from '@/stores/admin'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const adminStore = useAdminStore()
 
 const showUserMenu = ref(false)
 const userMenuRef = ref<HTMLElement | null>(null)
 
 const navItems = [
-  { path: '/admin/dashboard', label: 'Panel de Control' },
+  { path: '/admin/dashboard', label: 'Reportes' },
+  { path: '/admin/alertas', label: 'Alertas' },
   { path: '/admin/users', label: 'Usuarios' }
 ]
+
+const unreadAlertCount = computed(() => {
+  return adminStore.dashboard.filter(
+    entry => entry.alerts.length > 0 && !adminStore.isAlertReadForUser(entry.user.id)
+  ).length
+})
 
 function toggleUserMenu() {
   showUserMenu.value = !showUserMenu.value
@@ -38,6 +47,8 @@ async function handleLogout(): Promise<void> {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  adminStore.fetchDashboard()
+  adminStore.loadReadAlerts()
 })
 
 onUnmounted(() => {
@@ -84,6 +95,7 @@ onUnmounted(() => {
         :class="{ active: route.path.startsWith(item.path) }"
       >
         {{ item.label }}
+        <span v-if="item.path === '/admin/alertas' && unreadAlertCount > 0" class="nav-badge">{{ unreadAlertCount }}</span>
       </router-link>
     </nav>
     <main class="admin-content">
@@ -94,7 +106,8 @@ onUnmounted(() => {
 
 <style scoped>
 .admin-layout {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   background-color: #F5F5F5;
@@ -108,6 +121,7 @@ onUnmounted(() => {
   color: white;
   padding: 1rem 1.25rem;
   padding-top: calc(1rem + env(safe-area-inset-top));
+  flex-shrink: 0;
 }
 
 .header-title {
@@ -176,6 +190,7 @@ onUnmounted(() => {
   background-color: white;
   border-bottom: 1px solid #E5E7EB;
   padding: 0 1rem;
+  flex-shrink: 0;
 }
 
 .nav-item {
@@ -195,6 +210,31 @@ onUnmounted(() => {
 
 .admin-content {
   flex: 1;
+  min-height: 0;
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-badge {
+  position: absolute;
+  top: 0.25rem;
+  right: -0.15rem;
+  background-color: #DC2626;
+  color: white;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0 0.25rem;
 }
 </style>

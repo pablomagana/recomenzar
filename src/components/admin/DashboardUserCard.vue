@@ -37,7 +37,12 @@ const moodLabels: Record<number, string> = {
           <span v-else class="initials">{{ entry.user.nombre[0] }}{{ entry.user.apellidos[0] }}</span>
         </div>
         <div class="user-details">
-          <h3 class="user-name">{{ entry.user.nombre }} {{ entry.user.apellidos }}</h3>
+          <div class="name-row">
+            <h3 class="user-name">{{ entry.user.nombre }} {{ entry.user.apellidos }}</h3>
+            <svg v-if="entry.alerts.length > 0" class="warning-icon" viewBox="0 0 14 14" fill="#DC2626" width="14" height="14">
+              <path d="M7 0.5L0.5 12.5h13L7 0.5zm0 4a0.75 0.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 7 4.5zm0 6a0.75 0.75 0 1 1 0 1.5 0.75 0.75 0 0 1 0-1.5z"/>
+            </svg>
+          </div>
           <p class="user-email">{{ entry.user.email }}</p>
         </div>
       </div>
@@ -145,11 +150,21 @@ const moodLabels: Record<number, string> = {
   font-size: 0.875rem;
 }
 
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .user-name {
   font-size: 0.95rem;
   font-weight: 600;
   color: #424242;
   margin: 0;
+}
+
+.warning-icon {
+  flex-shrink: 0;
 }
 
 .user-email {
