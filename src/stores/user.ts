@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { User } from '@/types'
+import type { User, ChangePasswordRequest } from '@/types'
 import { userApi } from '@/services/api/user'
 import { useAuthStore } from './auth'
 
@@ -77,6 +77,19 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  async function changePassword(data: ChangePasswordRequest): Promise<void> {
+    isLoading.value = true
+    error.value = null
+    try {
+      await userApi.changePassword(data)
+    } catch (e) {
+      error.value = 'Error al cambiar la contraseña'
+      throw e
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     isLoading,
     error,
@@ -85,6 +98,7 @@ export const useUserStore = defineStore('user', () => {
     fetchProfile,
     updateProfile,
     uploadAvatar,
-    deleteAvatar
+    deleteAvatar,
+    changePassword
   }
 })

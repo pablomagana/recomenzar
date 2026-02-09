@@ -1,5 +1,5 @@
 import apiClient from './client'
-import type { User } from '@/types'
+import type { User, ChangePasswordRequest } from '@/types'
 
 export const userApi = {
   async getProfile(): Promise<User> {
@@ -26,5 +26,9 @@ export const userApi = {
   async deleteAvatar(): Promise<User> {
     const response = await apiClient.delete<User>('/users/me/avatar')
     return response.data
+  },
+
+  async changePassword(data: ChangePasswordRequest): Promise<void> {
+    await apiClient.patch('/users/me/password', data)
   }
 }

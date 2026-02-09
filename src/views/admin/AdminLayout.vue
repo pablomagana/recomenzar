@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -6,22 +7,73 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
+const showUserMenu = ref(false)
+const userMenuRef = ref<HTMLElement | null>(null)
+
 const navItems = [
   { path: '/admin/dashboard', label: 'Panel de Control' },
   { path: '/admin/users', label: 'Usuarios' }
 ]
 
+function toggleUserMenu() {
+  showUserMenu.value = !showUserMenu.value
+}
+
+function handleClickOutside(event: MouseEvent) {
+  if (userMenuRef.value && !userMenuRef.value.contains(event.target as Node)) {
+    showUserMenu.value = false
+  }
+}
+
+function goToProfile() {
+  showUserMenu.value = false
+  router.push('/admin/profile')
+}
+
 async function handleLogout(): Promise<void> {
+  showUserMenu.value = false
   await authStore.logout()
   router.push('/login')
 }
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
   <div class="admin-layout">
     <header class="admin-header">
       <h1 class="header-title">reComenzar Admin</h1>
-      <button class="logout-btn" @click="handleLogout">Cerrar sesion</button>
+      <div ref="userMenuRef" class="user-menu-container">
+        <button class="user-icon-btn" @click="toggleUserMenu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+          </svg>
+        </button>
+        <div v-if="showUserMenu" class="user-dropdown">
+          <button class="dropdown-item" @click="goToProfile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+            </svg>
+            Mi perfil
+          </button>
+          <button class="dropdown-item dropdown-item--danger" @click="handleLogout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
     </header>
     <nav class="admin-nav">
       <router-link
@@ -64,20 +116,61 @@ async function handleLogout(): Promise<void> {
   margin: 0;
 }
 
-.logout-btn {
+.user-menu-container {
+  position: relative;
+}
+
+.user-icon-btn {
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: none;
   color: white;
-  padding: 0.4rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.8rem;
   cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
-.logout-btn:active {
-  background-color: rgba(255, 255, 255, 0.1);
+.user-icon-btn:active {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  color: #424242;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:active {
+  background-color: #F5F5F5;
+}
+
+.dropdown-item--danger {
+  color: #DC2626;
+}
 .admin-nav {
   display: flex;
   background-color: white;

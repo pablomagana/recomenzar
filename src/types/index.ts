@@ -23,6 +23,11 @@ export interface TokenPayload {
   exp: number
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string
+  newPassword: string
+}
+
 // User Types
 export interface User {
   id: string

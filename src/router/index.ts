@@ -91,6 +91,11 @@ const router = createRouter({
           path: 'users/:id/edit',
           name: 'admin-user-edit',
           component: () => import('@/views/admin/AdminUserFormView.vue')
+        },
+        {
+          path: 'profile',
+          name: 'admin-profile',
+          component: () => import('@/views/admin/AdminProfileView.vue')
         }
       ]
     },
