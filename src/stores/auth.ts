@@ -5,6 +5,16 @@ import { authApi } from '@/services/api/auth'
 import { storage } from '@/services/storage'
 import { initializeNotifications, cancelNotificationsByCategory } from '@/services/notifications'
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    // Consider expired if less than 60 seconds remaining
+    return payload.exp * 1000 < Date.now() + 60_000
+  } catch {
+    return true
+  }
+}
+
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const accessToken = ref<string | null>(null)
@@ -30,6 +40,16 @@ export const useAuthStore = defineStore('auth', () => {
         accessToken.value = storedAccessToken
         refreshToken.value = storedRefreshToken
         user.value = storedUser
+
+        if (isTokenExpired(storedAccessToken)) {
+          try {
+            await refreshAccessToken()
+          } catch {
+            await clearAuthData()
+            return
+          }
+        }
+
         await initializeNotifications()
       }
     } finally {

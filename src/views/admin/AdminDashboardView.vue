@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useAdminStore } from '@/stores/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import DashboardUserCard from '@/components/admin/DashboardUserCard.vue'
@@ -16,10 +16,6 @@ const totalAlerts = computed(() => {
 
 const usersWithAlerts = computed(() => {
   return dashboard.value.filter(entry => entry.alerts.length > 0).length
-})
-
-onMounted(() => {
-  adminStore.fetchDashboard()
 })
 </script>
 
@@ -127,9 +123,9 @@ onMounted(() => {
   text-align: center;
   border: 1px solid #E5E7EB;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.4rem;
 }
 
 .stat-number {
