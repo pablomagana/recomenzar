@@ -33,15 +33,19 @@ function generateNotificationId(category: string, identifier: string | number): 
 }
 
 export async function requestNotificationPermissions(): Promise<boolean> {
-  const permission = await LocalNotifications.checkPermissions()
+  try {
+    const permission = await LocalNotifications.checkPermissions()
 
-  if (permission.display === 'granted') {
-    return true
-  }
+    if (permission.display === 'granted') {
+      return true
+    }
 
-  if (permission.display === 'prompt') {
-    const request = await LocalNotifications.requestPermissions()
-    return request.display === 'granted'
+    if (permission.display === 'prompt') {
+      const request = await LocalNotifications.requestPermissions()
+      return request.display === 'granted'
+    }
+  } catch {
+    // Notifications not supported in this browser (e.g. mobile Safari)
   }
 
   return false
@@ -74,16 +78,20 @@ export function setupNotificationListeners(): void {
 }
 
 export async function cancelNotificationsByCategory(category: string): Promise<void> {
-  const pending = await LocalNotifications.getPending()
-  const toCancel = pending.notifications.filter(n => {
-    const extra = n.extra as { type?: string } | undefined
-    return extra?.type === category
-  })
-
-  if (toCancel.length > 0) {
-    await LocalNotifications.cancel({
-      notifications: toCancel.map(n => ({ id: n.id }))
+  try {
+    const pending = await LocalNotifications.getPending()
+    const toCancel = pending.notifications.filter(n => {
+      const extra = n.extra as { type?: string } | undefined
+      return extra?.type === category
     })
+
+    if (toCancel.length > 0) {
+      await LocalNotifications.cancel({
+        notifications: toCancel.map(n => ({ id: n.id }))
+      })
+    }
+  } catch {
+    // Notifications not supported
   }
 }
 
@@ -124,7 +132,11 @@ export async function scheduleReminderNotifications(): Promise<void> {
     })
   }
 
-  await LocalNotifications.schedule({ notifications })
+  try {
+    await LocalNotifications.schedule({ notifications })
+  } catch {
+    // Notifications not supported
+  }
 }
 
 export async function scheduleActivityNotifications(schedule: DailySchedule): Promise<void> {
@@ -158,7 +170,11 @@ export async function scheduleActivityNotifications(schedule: DailySchedule): Pr
   }
 
   if (notifications.length > 0) {
-    await LocalNotifications.schedule({ notifications })
+    try {
+      await LocalNotifications.schedule({ notifications })
+    } catch {
+      // Notifications not supported
+    }
   }
 }
 
