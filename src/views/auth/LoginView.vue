@@ -22,6 +22,10 @@ async function handleSubmit(data: { email: string; password: string }): Promise<
 function goToRegister(): void {
   router.push('/register')
 }
+
+function goToForgotPassword(): void {
+  router.push('/forgot-password')
+}
 </script>
 
 <template>
@@ -40,6 +44,10 @@ function goToRegister(): void {
 
     <div class="login-content">
       <LoginForm ref="formRef" @submit="handleSubmit" />
+
+      <p class="forgot-password-link">
+        <button class="link-button" @click="goToForgotPassword">¿Olvidaste tu contraseña?</button>
+      </p>
 
       <p class="register-link">
         ¿No tienes cuenta?
@@ -93,6 +101,12 @@ function goToRegister(): void {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 1rem;
+  color: #6B7280;
 }
 
 .register-link {
