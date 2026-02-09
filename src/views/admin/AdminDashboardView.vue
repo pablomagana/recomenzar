@@ -119,13 +119,14 @@ const usersWithAlerts = computed(() => {
 .stat-card {
   background: white;
   border-radius: 0.5rem;
-  padding: 0.5rem;
-  text-align: center;
+  padding: 0.5rem 0.75rem;
   border: 1px solid #E5E7EB;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.35rem;
+  overflow: visible;
 }
 
 .stat-number {
@@ -145,6 +146,7 @@ const usersWithAlerts = computed(() => {
 
 .stat-icon {
   color: #2E7D32;
+  flex-shrink: 0;
 }
 
 .stat-card.alerts .stat-icon {
