@@ -87,6 +87,18 @@ function goToPrivacyPolicy(): void {
   router.push('/politica-privacidad')
 }
 
+const showDeleteModal = ref(false)
+
+function requestAccountDeletion(): void {
+  const email = user.value?.email || ''
+  const subject = encodeURIComponent('Solicitud de eliminación de cuenta')
+  const body = encodeURIComponent(
+    `Hola,\n\nSolicito la eliminación de mi cuenta y todos los datos asociados.\n\nCorreo de la cuenta: ${email}\n\nGracias.`
+  )
+  window.open(`mailto:info@recomenzar.es?subject=${subject}&body=${body}`, '_self')
+  showDeleteModal.value = false
+}
+
 async function handleLogout(): Promise<void> {
   await authStore.logout()
   router.push('/login')
@@ -231,6 +243,31 @@ function calculateStreak(reports: typeof reportsStore.reports): number {
         <button class="btn-secondary logout-btn" @click="handleLogout">
           Cerrar sesión
         </button>
+
+        <button class="delete-account-btn" @click="showDeleteModal = true">
+          Eliminar mi cuenta
+        </button>
+
+        <div v-if="showDeleteModal" class="modal-overlay" @click.self="showDeleteModal = false">
+          <div class="modal-content">
+            <h3>Eliminar cuenta</h3>
+            <p>
+              Al confirmar, se abrirá tu aplicación de correo con una solicitud
+              pre-llenada para eliminar tu cuenta y todos los datos asociados.
+            </p>
+            <p class="modal-note">
+              El equipo procesará tu solicitud y te notificará cuando se haya completado.
+            </p>
+            <div class="modal-actions">
+              <button class="btn-modal-cancel" @click="showDeleteModal = false">
+                Cancelar
+              </button>
+              <button class="btn-modal-confirm" @click="requestAccountDeletion">
+                Enviar solicitud
+              </button>
+            </div>
+          </div>
+        </div>
       </template>
     </div>
   </div>
@@ -368,5 +405,82 @@ function calculateStreak(reports: typeof reportsStore.reports): number {
   margin: 1rem;
   background-color: #FEE2E2;
   color: #DC2626;
+}
+
+.delete-account-btn {
+  display: block;
+  margin: 0.5rem auto 2rem;
+  background: none;
+  border: none;
+  color: #DC2626;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-content h3 {
+  margin: 0 0 1rem;
+  color: #424242;
+  font-size: 1.1rem;
+}
+
+.modal-content p {
+  margin: 0 0 0.75rem;
+  color: #6B7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.modal-note {
+  font-size: 0.8rem !important;
+  font-style: italic;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 0.625rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  background: white;
+  color: #6B7280;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-modal-confirm {
+  flex: 1;
+  padding: 0.625rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #DC2626;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 </style>
