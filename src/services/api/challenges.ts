@@ -1,5 +1,6 @@
 import apiClient from './client'
 import type { Challenge } from '@/types'
+import { getMondayOfWeek, formatDateISO } from '@/services/timeUtils'
 
 export const challengesApi = {
   async getChallenges(): Promise<Challenge[]> {
@@ -8,7 +9,8 @@ export const challengesApi = {
   },
 
   async createChallenge(nombre: string): Promise<Challenge> {
-    const response = await apiClient.post<Challenge>('/challenges', { nombre })
+    const weekStartDate = formatDateISO(getMondayOfWeek())
+    const response = await apiClient.post<Challenge>('/challenges', { nombre, weekStartDate })
     return response.data
   },
 
