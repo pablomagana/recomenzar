@@ -26,6 +26,10 @@ function goToRegister(): void {
 function goToForgotPassword(): void {
   router.push('/forgot-password')
 }
+
+function goToPrivacyPolicy(): void {
+  router.push('/politica-privacidad')
+}
 </script>
 
 <template>
@@ -52,6 +56,10 @@ function goToForgotPassword(): void {
       <p class="register-link">
         ¿No tienes cuenta?
         <button class="link-button" @click="goToRegister">Regístrate</button>
+      </p>
+
+      <p class="privacy-link">
+        <button class="link-button privacy-button" @click="goToPrivacyPolicy">Política de Privacidad</button>
       </p>
     </div>
   </div>
@@ -122,5 +130,16 @@ function goToForgotPassword(): void {
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.privacy-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.privacy-button {
+  font-size: 0.85rem;
+  color: #6B7280;
+  font-weight: 400;
 }
 </style>

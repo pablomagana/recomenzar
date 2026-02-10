@@ -117,6 +117,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/politica-privacidad',
+      name: 'privacy-policy',
+      component: () => import('@/views/PrivacyPolicyView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/tabs/profile'
     }

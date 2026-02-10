@@ -83,6 +83,10 @@ async function handleChangePassword(): Promise<void> {
   }
 }
 
+function goToPrivacyPolicy(): void {
+  router.push('/politica-privacidad')
+}
+
 async function handleLogout(): Promise<void> {
   await authStore.logout()
   router.push('/login')
@@ -217,6 +221,13 @@ function calculateStreak(reports: typeof reportsStore.reports): number {
           </form>
         </div>
 
+        <button class="privacy-policy-btn" @click="goToPrivacyPolicy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          Política de Privacidad
+        </button>
+
         <button class="btn-secondary logout-btn" @click="handleLogout">
           Cerrar sesión
         </button>
@@ -335,6 +346,22 @@ function calculateStreak(reports: typeof reportsStore.reports): number {
   color: #2E7D32;
   font-size: 0.85rem;
   margin: 0;
+}
+
+.privacy-policy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: calc(100% - 2rem);
+  margin: 0 1rem;
+  padding: 0.75rem;
+  background: none;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  color: #6B7280;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 
 .logout-btn {
